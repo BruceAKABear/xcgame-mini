@@ -2,6 +2,9 @@
 	<view>
 		<u-top-tips ref="uTips"></u-top-tips>
 		<view class="login-container">
+			<view class="login-header-box">
+				<utext>用户登录</utext>
+			</view>
 			<u-form :model="loginParam" ref="uForm">
 				<u-form-item label="账号">
 					<u-input v-model="loginParam.phoneNumber" type="number" :focus="true" />
@@ -14,9 +17,7 @@
 			<div class="goto-login-box">
 				<text @click="showRegister=true">没有账号？点击注册</text>
 			</div>
-
 		</view>
-
 	</view>
 </template>
 
@@ -53,8 +54,22 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		height: 700rpx;
+		height: 600rpx;
 		width: 600rpx;
+		padding: 30rpx;
+		border-radius: 20rpx;
+		box-shadow: 0 0 15px #C0C0C0;
+
+		.login-header-box {
+			margin-top: 20rpx;
+			margin-bottom: 40rpx;
+			display: flex;
+			justify-content: center;
+			font-size: 30rpx;
+			font-weight: bold;
+			color: #C0C0C0;
+		}
+
 
 		.login-button {
 			margin-top: 60rpx;
