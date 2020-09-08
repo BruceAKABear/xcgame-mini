@@ -1,16 +1,35 @@
 <template>
 	<view>
 		<u-top-tips ref="uTips"></u-top-tips>
+		<!-- 登录box -->
 		<view class="login-container">
 			<view class="login-header-box">
-				<utext>用户登录</utext>
+				<text>用户登录</text>
 			</view>
 			<u-form :model="loginParam" ref="uForm">
 				<u-form-item label="账号">
-					<u-input v-model="loginParam.phoneNumber" type="number" :focus="true" />
+					<u-input v-model="loginParam.phoneNumber" type="number" :focus="true" placeholder="请输入手机号" />
 				</u-form-item>
 				<u-form-item label="密码">
-					<u-input v-model="loginParam.passWord" type="password" :clearable="true" :password-icon="true" />
+					<u-input v-model="loginParam.passWord" type="password" :clearable="true" :password-icon="true" placeholder="请输入密码" />
+				</u-form-item>
+			</u-form>
+			<u-button type="success" class="login-button" @click="doLogin">登录</u-button>
+			<div class="goto-login-box">
+				<text @click="showRegister=true">没有账号？点击注册</text>
+			</div>
+		</view>
+		<!-- 注册box -->
+		<view class="login-container" v-if="false">
+			<view class="login-header-box">
+				<text>用户登录</text>
+			</view>
+			<u-form :model="loginParam" ref="uForm">
+				<u-form-item label="账号">
+					<u-input v-model="loginParam.phoneNumber" type="number" :focus="true" placeholder="请输入手机号" />
+				</u-form-item>
+				<u-form-item label="密码">
+					<u-input v-model="loginParam.passWord" type="password" :clearable="true" :password-icon="true" placeholder="请输入密码" />
 				</u-form-item>
 			</u-form>
 			<u-button type="success" class="login-button" @click="doLogin">登录</u-button>
@@ -35,11 +54,33 @@
 		},
 		methods: {
 			doLogin() {
-				this.$refs.uTips.show({
-					title: '登录成功',
-					type: 'success',
-					duration: '1500'
-				})
+				//验证
+				if (this.loginParam.phoneNumber === '' || this.loginParam.passWord === '') {
+					//抛出异常
+					this.$refs.uTips.show({
+						title: '请将信息填写完整',
+						type: 'error',
+						duration: '1000'
+					})
+				} else {
+					this.$u.api.loginByPassword(this.loginParam).then(res => {
+						if (!res.status) {
+							this.$refs.uTips.show({
+								title: res.message,
+								type: 'warning ',
+								duration: '1000'
+							})
+						} else {
+							this.$refs.uTips.show({
+								title: res.message,
+								type: 'warning ',
+								duration: '1000'
+							})
+
+						}
+					})
+				}
+
 			}
 		},
 		onLoad() {
