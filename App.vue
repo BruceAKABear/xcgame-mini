@@ -4,7 +4,11 @@
 		mapMutations
 	} from 'vuex';
 	export default {
+		/**
+		 * 系统变编译时根据状态判断，H5不需要直接默认登录
+		 */
 		onLaunch: function() {
+			// #ifdef MP-WEIXIN
 			const updateManager = uni.getUpdateManager()
 			updateManager.onCheckForUpdate(function(res) {
 				// 请求完新版本信息的回调
@@ -26,9 +30,15 @@
 			updateManager.onUpdateFailed(function(res) {
 				console.error('新版本下载失败')
 			})
-
 			//用户登录
 			this.doLogin()
+			// #endif
+			// #ifdef H5
+			uni.reLaunch({
+				url: 'pages/Login/Login'
+			})
+			// #endif
+
 		},
 		onShow: function() {
 			console.log('App Show')
@@ -50,6 +60,7 @@
 			 */
 			doLogin() {
 				var that = this
+				// #ifdef MP-WEIXIN
 				uni.login({
 					provider: 'weixin',
 					success(res) {
@@ -66,6 +77,7 @@
 						})
 					}
 				})
+				// #endif
 			},
 			doRequestAppInfo() {
 				this.$u.api.appInfo({
@@ -80,7 +92,7 @@
 			}
 		},
 		computed: {
-			...mapState(['appId'])
+			...mapState(['appId', 'token'])
 		}
 	}
 </script>

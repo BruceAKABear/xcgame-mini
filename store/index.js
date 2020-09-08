@@ -5,7 +5,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
 	state: {
 		//应用ID，固定死
-		appId: '1300669936771317762',
+		appId: '1302160893459935233',
 		//用户登录后生成的token
 		token: '',
 		//应用类型1小程序2H5

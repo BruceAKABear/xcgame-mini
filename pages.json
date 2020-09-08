@@ -8,6 +8,11 @@
 			"style": {
 				"navigationBarTitleText": "熙辰游戏"
 			}
+		}, {
+			"path": "pages/Login/Login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
 		}
 	],
 	"globalStyle": {

@@ -4,6 +4,7 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
+		<web-view src="http://www.baidu.com"></web-view>
 	</view>
 </template>
 
@@ -25,7 +26,7 @@
 			...mapMutations(['saveToken'])
 		},
 		computed: {
-			...mapState(['appId'])
+			...mapState(['appId', 'showType'])
 		}
 	}
 </script>
