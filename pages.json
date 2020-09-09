@@ -9,9 +9,11 @@
 				"navigationBarTitleText": "熙辰游戏"
 			}
 		}, {
-			"path": "pages/Login/Login",
+			"path": "pages/Login/Login"
+		}, {
+			"path": "pages/pay_confirm/pay_confirm",
 			"style": {
-				"navigationBarTitleText": "登录"
+				"navigationBarTitleText": "支付确认"
 			}
 		}
 	],

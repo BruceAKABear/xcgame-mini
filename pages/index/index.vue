@@ -4,7 +4,8 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
-		<web-view src="http://www.baidu.com"></web-view>
+		<u-button @click="gotoPay">跳转支付</u-button>
+		<!-- <web-view src="http://www.baidu.com"></web-view> -->
 	</view>
 </template>
 
@@ -23,7 +24,12 @@
 
 		},
 		methods: {
-			...mapMutations(['saveToken'])
+			...mapMutations(['saveToken']),
+			gotoPay(){
+				uni.navigateTo({
+					url:'../pay_confirm/pay_confirm'
+				})
+			}
 		},
 		computed: {
 			...mapState(['appId', 'showType'])

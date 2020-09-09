@@ -69,7 +69,7 @@
 							code: res.code
 						}).then(res => {
 							console.log('登录后获取的toekn....', res)
-							that.saveToken(res)
+							that.saveToken(res.data)
 							//获取应用基本信息
 							that.doRequestAppInfo()
 						}).catch(res => {

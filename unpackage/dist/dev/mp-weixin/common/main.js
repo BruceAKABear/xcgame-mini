@@ -177,7 +177,7 @@ var _vuex = __webpack_require__(/*! vuex */ 8);function ownKeys(object, enumerab
             code: res.code }).
           then(function (res) {
             console.log('登录后获取的toekn....', res);
-            that.saveToken(res);
+            that.saveToken(res.data);
             //获取应用基本信息
             that.doRequestAppInfo();
           }).catch(function (res) {

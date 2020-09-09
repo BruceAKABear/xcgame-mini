@@ -760,7 +760,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -7122,7 +7122,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -7143,14 +7143,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -7235,7 +7235,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -10408,13 +10408,14 @@ var install = function install(Vue, vm) {
   };
   // 响应拦截，判断状态码是否通过
   Vue.prototype.$u.http.interceptor.response = function (res) {
+    console.log('=====响应拦截器=====', res);
     // 如果把originalData设置为了true，这里得到将会是服务器返回的所有的原始数据
     // 判断可能变成了res.statueCode，或者res.data.code之类的，请打印查看结果
     if (res.status) {
       // 如果把originalData设置为了true，这里return回什么，this.$u.post的then回调中就会得到什么
-      return res.data;
+      return res;
     } else {
-      return false;
+      return res;
     }
   };
 };var _default =
@@ -10435,7 +10436,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 var hotSearchUrl = '/ebapi/store_api/hot_search';
 var indexUrl = '/ebapi/public_api/index';
 var miniLoginUrl = '/customer/loginByCode';
+var loginByPasswordUrl = '/customer/loginByPassword';
 var appInfoUrl = '/appInfo/findById';
+var preparePayMiniUrl = '/pay/preparePayMini';
 
 // 此处第二个参数vm，就是我们在页面使用的this，你可以通过vm获取vuex等操作，更多内容详见uView对拦截器的介绍部分：
 // https://uviewui.com/js/http.html#%E4%BD%95%E8%B0%93%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%EF%BC%9F
@@ -10445,6 +10448,14 @@ var install = function install(Vue, vm) {
 
   //查询应用基本信息
   var appInfo = function appInfo() {var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};return vm.$u.get(appInfoUrl, params);};
+  /**
+                                                                                                                                                                 * 手机号密码登录
+                                                                                                                                                                 */
+  var loginByPassword = function loginByPassword() {var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};return vm.$u.post(loginByPasswordUrl, params);};
+  /**
+                                                                                                                                                                                          * 小程序预支付请求
+                                                                                                                                                                                          */
+  var preparePayMini = function preparePayMini() {var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};return vm.$u.post(preparePayMiniUrl, params);};
 
 
 
@@ -10453,7 +10464,9 @@ var install = function install(Vue, vm) {
   // 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
   vm.$u.api = {
     miniLogin: miniLogin,
-    appInfo: appInfo };
+    appInfo: appInfo,
+    loginByPassword: loginByPassword,
+    preparePayMini: preparePayMini };
 
 };var _default =
 
@@ -10496,7 +10509,13 @@ var install = function install(Vue, vm) {
 /* 73 */,
 /* 74 */,
 /* 75 */,
-/* 76 */
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */
 /*!*************************************************************************************!*\
   !*** C:/Users/BLab/Documents/HBuilderProjects/xcgame/uview-ui/libs/util/emitter.js ***!
   \*************************************************************************************/
@@ -10555,7 +10574,7 @@ function _broadcast(componentName, eventName, params) {
     } } };exports.default = _default;
 
 /***/ }),
-/* 77 */
+/* 83 */
 /*!*********************************************************************************************!*\
   !*** C:/Users/BLab/Documents/HBuilderProjects/xcgame/uview-ui/libs/util/async-validator.js ***!
   \*********************************************************************************************/
@@ -10585,7 +10604,7 @@ function _broadcast(componentName, eventName, params) {
 var formatRegExp = /%[sdj%]/g;
 var warning = function warning() {}; // don't print warning message when in production env or node runtime
 
-if (typeof process !== 'undefined' && Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}) && "development" !== 'production' && typeof window !==
+if (typeof process !== 'undefined' && Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}) && "development" !== 'production' && typeof window !==
 'undefined' && typeof document !== 'undefined') {
   warning = function warning(type, errors) {
     if (typeof console !== 'undefined' && console.warn) {
@@ -11918,10 +11937,10 @@ Schema.warning = warning;
 Schema.messages = messages;var _default =
 
 Schema;exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../Desktop/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 78)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../Desktop/HBuilderX/plugins/uniapp-cli/node_modules/node-libs-browser/mock/process.js */ 84)))
 
 /***/ }),
-/* 78 */
+/* 84 */
 /*!********************************************************!*\
   !*** ./node_modules/node-libs-browser/mock/process.js ***!
   \********************************************************/
@@ -11952,7 +11971,7 @@ exports.binding = function (name) {
     var path;
     exports.cwd = function () { return cwd };
     exports.chdir = function (dir) {
-        if (!path) path = __webpack_require__(/*! path */ 79);
+        if (!path) path = __webpack_require__(/*! path */ 85);
         cwd = path.resolve(dir, cwd);
     };
 })();
@@ -11965,7 +11984,7 @@ exports.features = {};
 
 
 /***/ }),
-/* 79 */
+/* 85 */
 /*!***********************************************!*\
   !*** ./node_modules/path-browserify/index.js ***!
   \***********************************************/
@@ -12275,7 +12294,7 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 78)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/mock/process.js */ 84)))
 
 /***/ })
 ]]);
